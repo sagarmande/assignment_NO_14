@@ -1,0 +1,65 @@
+class Node:
+    def __init__(self, value):
+        self.data = value
+        self.next = None
+        self.bottom = None
+
+def mergeLists(list1, list2):
+    # Base cases
+    if list1 is None:
+        return list2
+    if list2 is None:
+        return list1
+    
+    # Merge the two sorted lists
+    merged_list = None
+    if list1.data <= list2.data:
+        merged_list = list1
+        merged_list.bottom = mergeLists(list1.bottom, list2)
+    else:
+        merged_list = list2
+        merged_list.bottom = mergeLists(list1, list2.bottom)
+    
+    return merged_list
+
+def flattenLinkedList(head):
+    if head is None or head.next is None:
+        return head
+    
+    # Merge the bottom list of the current node with the flattened list of the remaining nodes
+    head.next = flattenLinkedList(head.next)
+    head = mergeLists(head, head.next)
+    
+    return head
+
+def printList(head):
+    curr = head
+    while curr:
+        print(curr.data, end=" ")
+        curr = curr.bottom
+    print()
+
+# Create the linked list with sub-linked lists
+head = Node(5)
+head.next = Node(10)
+head.next.next = Node(19)
+head.next.next.next = Node(28)
+
+head.bottom = Node(7)
+head.bottom.bottom = Node(8)
+head.bottom.bottom.bottom = Node(30)
+
+head.next.bottom = Node(20)
+
+head.next.next.bottom = Node(22)
+head.next.next.bottom.bottom = Node(50)
+
+head.next.next.next.bottom = Node(35)
+head.next.next.next.bottom.bottom = Node(40)
+head.next.next.next.bottom.bottom.bottom = Node(45)
+
+# Flatten the linked list
+head = flattenLinkedList(head)
+
+# Print the flattened list
+printList(head)

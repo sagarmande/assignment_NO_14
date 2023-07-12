@@ -1,0 +1,56 @@
+class Node:
+    def __init__(self, value):
+        self.data = value
+        self.next = None
+        self.random = None
+
+def cloneLinkedList(head):
+    if head is None:
+        return None
+
+    # Step 1: Create new nodes and mapping
+    original_to_new = {}
+    curr = head
+    while curr:
+        new_node = Node(curr.data)
+        original_to_new[curr] = new_node
+        curr = curr.next
+
+    # Step 2: Set next and random pointers of new nodes
+    curr = head
+    while curr:
+        new_node = original_to_new[curr]
+        new_node.next = original_to_new.get(curr.next)
+        new_node.random = original_to_new.get(curr.random)
+        curr = curr.next
+
+    return original_to_new[head]
+
+# Create the original linked list with random pointers
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(3)
+head.next.next.next = Node(4)
+
+head.random = head.next.next
+head.next.random = head.next.next.next
+head.next.next.random = head.next
+head.next.next.next.random = head.next.next
+
+# Clone the linked list
+clone_head = cloneLinkedList(head)
+
+# Print the cloned linked list
+curr = clone_head
+while curr:
+    print("Node value:", curr.data)
+    if curr.next:
+        print("Next node value:", curr.next.data)
+    else:
+        print("Next node: None")
+    if curr.random:
+        print("Random node value:", curr.random.data)
+    else:
+        print("Random node: None")
+    print()
+    curr = curr.next

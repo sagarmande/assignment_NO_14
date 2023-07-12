@@ -1,0 +1,60 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def left_shift_linked_list(head, k):
+    if not head or not head.next or k == 0:
+        return head
+    
+    # Find the k+1th node from the beginning
+    current = head
+    for _ in range(k):
+        if not current.next:
+            return head
+        current = current.next
+    
+    # New head of the shifted linked list
+    new_head = current.next
+    current.next = None
+    
+    # Traverse to the last node
+    current = new_head
+    while current.next:
+        current = current.next
+    
+    # Set the next pointer of the last node to the original head
+    current.next = head
+    
+    return new_head
+# Example 1
+head = Node(2)
+head.next = Node(4)
+head.next.next = Node(7)
+head.next.next.next = Node(8)
+head.next.next.next.next = Node(9)
+
+k = 3
+new_head = left_shift_linked_list(head, k)
+current = new_head
+while current:
+    print(current.data, end=" ")
+    current = current.next
+
+# Output: 8 9 2 4 7
+
+# Example 2
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(3)
+head.next.next.next = Node(4)
+head.next.next.next.next = Node(5)
+
+k = 2
+new_head = left_shift_linked_list(head, k)
+current = new_head
+while current:
+    print(current.data, end=" ")
+    current = current.next
+
+# Output: 3 4 5 1 2

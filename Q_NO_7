@@ -1,0 +1,50 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def next_greater_nodes(head):
+    # Convert linked list to a list
+    node_list = []
+    current = head
+    while current:
+        node_list.append(current.val)
+        current = current.next
+    
+    # Initialize answer array with zeros
+    n = len(node_list)
+    answer = [0] * n
+    
+    # Stack to store nodes in decreasing order of their values
+    stack = []
+    
+    # Traverse the list in reverse order
+    for i in range(n - 1, -1, -1):
+        while stack and stack[-1] <= node_list[i]:
+            stack.pop()
+        
+        if stack:
+            answer[i] = stack[-1]
+        
+        stack.append(node_list[i])
+    
+    return answer
+# Example 1
+head = ListNode(2)
+head.next = ListNode(1)
+head.next.next = ListNode(5)
+
+result = next_greater_nodes(head)
+print(result)  # Output: [5, 5, 0]
+
+# Example 2
+head = ListNode(1)
+head.next = ListNode(7)
+head.next.next = ListNode(5)
+head.next.next.next = ListNode(3)
+head.next.next.next.next = ListNode(6)
+head.next.next.next.next.next = ListNode(4)
+head.next.next.next.next.next.next = ListNode(8)
+
+result = next_greater_nodes(head)
+print(result)  # Output: [7, 8, 6, 6, 8, 8, 0]

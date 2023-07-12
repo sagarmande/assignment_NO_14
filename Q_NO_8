@@ -1,0 +1,56 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def remove_zero_sum_sublists(head):
+    dummy = ListNode(0)
+    dummy.next = head
+    prefix_sum = 0
+    sum_dict = {}
+    current = dummy
+
+    while current:
+        prefix_sum += current.val
+
+        if prefix_sum in sum_dict:
+            # Remove nodes from sum_dict[prefix_sum].next to current (inclusive)
+            prev = sum_dict[prefix_sum].next
+            remove_sum = prefix_sum + prev.val
+            while prev != current:
+                remove_sum += prev.next.val
+                del sum_dict[remove_sum]
+                prev = prev.next
+
+            sum_dict[prefix_sum].next = current.next
+        else:
+            sum_dict[prefix_sum] = current
+
+        current = current.next
+
+    return dummy.next
+# Example 1
+head = ListNode(1)
+head.next = ListNode(2)
+head.next.next = ListNode(-3)
+head.next.next.next = ListNode(3)
+head.next.next.next.next = ListNode(1)
+
+result = remove_zero_sum_sublists(head)
+while result:
+    print(result.val, end=" ")  # Output: 3 1
+    result = result.next
+print()
+
+# Example 2
+head = ListNode(1)
+head.next = ListNode(2)
+head.next.next = ListNode(3)
+head.next.next.next = ListNode(-3)
+head.next.next.next.next = ListNode(4)
+
+result = remove_zero_sum_sublists(head)
+while result:
+    print(result.val, end=" ")  # Output: 1 2 4
+    result = result.next
+print()

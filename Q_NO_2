@@ -1,0 +1,38 @@
+class Node:
+    def __init__(self, value):
+        self.data = value
+        self.next = None
+
+def reverseLinkedList(head):
+    prev = None
+    curr = head
+    while curr:
+        next_node = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next_node
+    return prev
+
+def addOne(head):
+    # Reverse the linked list
+    head = reverseLinkedList(head)
+    
+    # Traverse the reversed linked list and add 1
+    curr = head
+    carry = 1
+    while curr:
+        sum = curr.data + carry
+        curr.data = sum % 10
+        carry = sum // 10
+        if carry == 0:
+            break
+        curr = curr.next
+    
+    # If there is still a carry, append a new node to the end of the linked list
+    if carry != 0:
+        new_node = Node(carry)
+        curr.next = new_node
+
+    # Reverse the modified linked list
+    head = reverseLinkedList(head)
+    return head
